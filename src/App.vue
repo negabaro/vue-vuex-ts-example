@@ -26,7 +26,11 @@ import Dog from "./components/1/Dog.vue";
 })
 export default class App extends Vue {
   created() {
+    console.log("App created");
     console.log("this.$store App", this.$store);
+  }
+  mounted() {
+    console.log("App mounted");
   }
 }
 </script>

@@ -2,7 +2,11 @@
   <div>
     <span>Cat</span>
     <br>
-    <CatChild />
+    <span>Cat Food: {{ food}}</span>
+    <br>
+    <!-- <CatChild v-on:cry="feed" /> -->
+    <!-- <CatChild @cry="feed" /> -->
+    <CatChild :cat-crying2="catCrying2" />
   </div>
 </template>
 
@@ -13,9 +17,16 @@ export default {
     CatChild
   },
   data() {
-    return {};
+    return {
+      food: "yy",
+      catCrying2: "meow"
+    };
   },
   created() {
+    console.log("Cat created");
+    this.$on("setFeed", text => {
+      this.food = text;
+    });
     console.log("Cat this.$parent", this.$parent);
     //여기서 익명함수 function(){}으로 이벤트를 등록할 경우
     // this가 window를 가르키기 때문에 this를 사용하려면
@@ -23,14 +34,23 @@ export default {
     //상위 컴포넌트를 통해 이벤트를 발생시킨다.
     let emmitEvent = () => {
       //$emit() - 특정 범위를 이벤트로 부모에게 전달
-      this.$parent.$emit("setWorldText", "world22");
+      this.$parent.$emit("setSoundOfCrying", "meow");
     };
-    emmitEvent();
+    //emmitEvent();
     //$parent.$emit를 통해 자신의 상위 객체에 이벤트를 트리거시키고, World.vue에서 $parent.$on을 통해 이벤트를 핸들링합니다.
     //트리거 시점이 핸들링 메서드가 등록된 이후여야 하므로 타임아웃을 걸어줍니다. 결과는 아래와 같습니다.
-    //setTimeout(emmitEvent, 1000);
+    setTimeout(emmitEvent, 1000);
   },
-  methods: {}
+  mounted() {
+    this.catCrying2 = "mew";
+    console.log("Cat mounted");
+  },
+  methods: {
+    feed() {
+      console.log("feed");
+      this.$parent.$emit("setFeed", "dogGum");
+    }
+  }
 };
 </script>
 <!-- 
